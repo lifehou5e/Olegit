@@ -1,5 +1,7 @@
 package arraydiff
 
+import "fmt"
+
 func main() {
-	12333123
+	fmt.Println("Hello world!")
 }
