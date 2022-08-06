@@ -17,7 +17,7 @@ const (
 
 func main() {
 	// open an existing file
-	wb, err := xlsx.OpenFile("Приоритетность архивов на координатный станок.xlsx")
+	wb, err := xlsx.OpenFile("table.xlsx")
 	if err != nil {
 		panic(err)
 	}
@@ -54,7 +54,7 @@ func main() {
 			space := strings.Index(k, " ")
 			parenthesis := strings.Index(k, "(")
 			k = strings.Trim(k, ")")
-			tmp = k[:space] + " " + thicknessParam + "мм ОЦ" + " на " + k[parenthesis+1:] + "\n"
+			tmp = k[:space] + " " + thicknessParam + "мм ОЦ" + " на " + k[parenthesis+1:]
 			tmp = strings.Trim(tmp, "№")
 			tmp = strings.Trim(tmp, "ООО ЭС")
 			outSlice = append(outSlice, tmp)
