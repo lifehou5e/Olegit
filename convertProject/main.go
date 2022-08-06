@@ -1,56 +1,54 @@
 package main
 
 import (
-	"encoding/csv"
 	"fmt"
-	"log"
-	"os"
+	"github.com/tealeg/xlsx"
+	"strings"
 )
 
-type ShoppingRecord struct {
-	Vegetable string
-	Fruit     string
-}
+const (
+	columnB = 1
+	columnD = 3
+	st3     = "ст3"
+	oc      = "оц"
+)
 
 func main() {
-	// open file
-	f, err := os.Open("examplecsv.csv")
+	// open an existing file
+	wb, err := xlsx.OpenFile("table.xlsx")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-
-	// remember to close the file at the end of the program
-	defer f.Close()
-
-	// read csv values using csv.Reader
-	csvReader := csv.NewReader(f)
-	data, err := csvReader.ReadAll()
-	if err != nil {
-		log.Fatal(err)
+	sh, ok := wb.Sheet["Заказы в работе"]
+	if !ok {
+		fmt.Println("Sheet does not exist")
+		return
 	}
+	var workingRange []string
+	var tmp string
+	rangeLow := 0
+	rangeHigh := 0
+	fmt.Println("Enter range of rows to work with")
+	fmt.Scan(&rangeLow, &rangeHigh)
+	var steelParam, thicknessParam string
+	fmt.Println("Enter what kind of steel do you want to work with: (ст3, оц, 09г2с)")
+	fmt.Scan(&steelParam)
+	fmt.Println("Enter what sheet thickness: (1,1.5,2,2.5,3,4)")
+	fmt.Scan(&thicknessParam)
 
-	// convert records to array of structs
-	shoppingList := createShoppingList(data)
-
-	// print the array
-	fmt.Printf("%+v\n", shoppingList)
-
-}
-
-func createShoppingList(data [][]string) []ShoppingRecord {
-	var shoppingList []ShoppingRecord
-	for i, line := range data {
-		if i > 0 { // omit header line
-			var rec ShoppingRecord
-			for j, field := range line {
-				if j == 0 {
-					rec.Vegetable = field
-				} else if j == 1 {
-					rec.Fruit = field
-				}
-			}
-			shoppingList = append(shoppingList, rec)
+	//fmt.Println(rangeLow, rangeHigh, sh.Row(1))
+	for i := rangeLow; i < rangeHigh; i++ {
+		workingRange = append(workingRange, sh.Cell(i, columnB).String())
+	}
+	//fmt.Println(workingRange)
+	for _, v := range workingRange {
+		if strings.Contains(v, st3) {
+			space := strings.Index(v, " ")
+			parenthesis := strings.Index(v, "(")
+			v = strings.Trim(v, ")")
+			tmp = v[:space] + " " + thicknessParam + "мм" + " на " + v[parenthesis+1:]
+			tmp = strings.Trim(tmp, "№")
 		}
 	}
-	return shoppingList
+	fmt.Println(tmp)
 }
