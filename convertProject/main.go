@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/tealeg/xlsx"
+	"os"
 	"strings"
 )
 
@@ -45,7 +46,7 @@ func main() {
 			space := strings.Index(k, " ")
 			parenthesis := strings.Index(k, "(")
 			k = strings.Trim(k, ")")
-			tmp = k[:space] + " " + thicknessParam + "мм чернуха" + " на " + k[parenthesis+1:]
+			tmp = k[:space] + " " + thicknessParam + "мм чернуха" + " на " + k[parenthesis+1:] + "\n"
 			tmp = strings.Trim(tmp, "№")
 			tmp = strings.Trim(tmp, "ООО ЭС")
 			outSlice = append(outSlice, tmp)
@@ -60,4 +61,12 @@ func main() {
 		}
 	}
 	fmt.Printf("%v", outSlice)
+	file, err := os.Create("test.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	for _, v := range outSlice {
+		file.WriteString(v)
+	}
 }
