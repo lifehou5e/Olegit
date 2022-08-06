@@ -7,10 +7,11 @@ import (
 )
 
 const (
-	columnB = 1
-	columnD = 3
-	st3     = "ст3"
-	oc      = "оц"
+	columnB    = 1
+	columnD    = 3
+	st3        = "ст3"
+	oc         = "оц"
+	steel09g2s = "09г2с"
 )
 
 func main() {
@@ -24,8 +25,9 @@ func main() {
 		fmt.Println("Sheet does not exist")
 		return
 	}
-	var workingRange []string
+	workingRange := make(map[string]string, 0)
 	var tmp string
+	var outSlice []string
 	rangeLow := 0
 	rangeHigh := 0
 	fmt.Println("Enter range of rows to work with")
@@ -35,20 +37,27 @@ func main() {
 	fmt.Scan(&steelParam)
 	fmt.Println("Enter what sheet thickness: (1,1.5,2,2.5,3,4)")
 	fmt.Scan(&thicknessParam)
-
-	//fmt.Println(rangeLow, rangeHigh, sh.Row(1))
 	for i := rangeLow; i < rangeHigh; i++ {
-		workingRange = append(workingRange, sh.Cell(i, columnB).String())
+		workingRange[sh.Cell(i, columnB).String()] = sh.Cell(i, columnD).String()
 	}
-	//fmt.Println(workingRange)
-	for _, v := range workingRange {
-		if strings.Contains(v, st3) {
-			space := strings.Index(v, " ")
-			parenthesis := strings.Index(v, "(")
-			v = strings.Trim(v, ")")
-			tmp = v[:space] + " " + thicknessParam + "мм" + " на " + v[parenthesis+1:]
+	for k, v := range workingRange {
+		if strings.Contains(k, st3) && strings.Contains(v, thicknessParam) {
+			space := strings.Index(k, " ")
+			parenthesis := strings.Index(k, "(")
+			k = strings.Trim(k, ")")
+			tmp = k[:space] + " " + thicknessParam + "мм чернуха" + " на " + k[parenthesis+1:]
 			tmp = strings.Trim(tmp, "№")
+			tmp = strings.Trim(tmp, "ООО ЭС")
+			outSlice = append(outSlice, tmp)
+		} else if strings.Contains(k, oc) && strings.Contains(v, thicknessParam) {
+			space := strings.Index(k, " ")
+			parenthesis := strings.Index(k, "(")
+			k = strings.Trim(k, ")")
+			tmp = k[:space] + " " + thicknessParam + "мм ОЦ" + " на " + k[parenthesis+1:]
+			tmp = strings.Trim(tmp, "№")
+			tmp = strings.Trim(tmp, "ООО ЭС")
+			outSlice = append(outSlice, tmp)
 		}
 	}
-	fmt.Println(tmp)
+	fmt.Printf("%v", outSlice)
 }
