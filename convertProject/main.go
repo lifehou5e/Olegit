@@ -121,6 +121,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Print("\n----------------\nфайл test.txt создан")
 	defer file.Close()
 	for _, v := range outSlice {
 		file.WriteString(v)
@@ -154,7 +155,6 @@ func inputSteel() (string, error) {
 }
 
 func newInput() error {
-	fmt.Print("\n----------------\nфайл test.txt создан")
 	var lastWords string
 	fmt.Println("\n----------------\nВведите любой символ, чтобы выйти")
 	fmt.Scan(&lastWords)
