@@ -19,7 +19,7 @@ const (
 
 func main() {
 	// open an existing file
-	wb, err := xlsx.OpenFile("table.xlsx")
+	wb, err := xlsx.OpenFile("Приоритетность архивов на координатный станок.xlsx")
 	if err != nil {
 		panic(err)
 	}
@@ -49,6 +49,12 @@ func main() {
 	} else if steelParam == oc {
 		for i := rangeLow; i < rangeHigh; i++ {
 			if strings.Contains(sh.Cell(i, columnB).String(), oc) {
+				workingRange[sh.Cell(i, columnB).String()] = sh.Cell(i, columnD).String()
+			}
+		}
+	} else if steelParam == steel09g2s {
+		for i := rangeLow; i < rangeHigh; i++ {
+			if strings.Contains(sh.Cell(i, columnB).String(), steel09g2s) {
 				workingRange[sh.Cell(i, columnB).String()] = sh.Cell(i, columnD).String()
 			}
 		}
