@@ -42,6 +42,7 @@ func main() {
 		return
 	}
 	if rangeLow > rangeHigh {
+		defer newInput()
 		fmt.Println(errors.New("ошибка: нижняя граница не может быть больше верхней"))
 		return
 	}
@@ -57,6 +58,7 @@ func main() {
 		return
 	}
 	if converted > 4 || converted < 1 {
+		defer newInput()
 		fmt.Println(errors.New("ошибка: заданная толщина не обрабатывается, либо введена неверно"))
 		return
 	}
@@ -123,11 +125,8 @@ func main() {
 	for _, v := range outSlice {
 		file.WriteString(v)
 	}
-	fmt.Print("\n----------------\nфайл test.txt создан")
-	var lastWords string
-	fmt.Println("\n----------------\nВведите любой символ, чтобы выйти")
-	fmt.Scan(&lastWords)
-	if lastWords != "" {
+	errEOF := newInput()
+	if errEOF == nil {
 		return
 	}
 }
@@ -152,4 +151,12 @@ func inputSteel() (string, error) {
 		fmt.Println(errors.New("ошибка: неверно введён материал"))
 		return inputSteel()
 	}
+}
+
+func newInput() error {
+	fmt.Print("\n----------------\nфайл test.txt создан")
+	var lastWords string
+	fmt.Println("\n----------------\nВведите любой символ, чтобы выйти")
+	fmt.Scan(&lastWords)
+	return nil
 }
