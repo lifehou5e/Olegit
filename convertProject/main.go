@@ -14,7 +14,7 @@ const (
 	columnD    = 3
 	st3        = "ст3"
 	oc         = "оц"
-	steel09g2s = "09г2с"
+	steel09g2s = "09Г2С"
 )
 
 func main() {
@@ -76,6 +76,14 @@ func main() {
 			space := strings.Index(k, " ")
 			parenthesis := strings.Index(k, "(")
 			tmp = k[:space] + " " + thicknessParam + "мм ОЦ" + " на " + k[parenthesis+1:]
+			tmp = strings.Trim(tmp, "№")
+			tmp = strings.Trim(tmp, "ООО ЭС")
+			tmp = strings.Trim(tmp, ")") + "\n"
+			outSlice = append(outSlice, tmp)
+		} else if strings.Contains(k, steel09g2s) && strings.Contains(v, thicknessParam) {
+			space := strings.Index(k, " ")
+			parenthesis := strings.Index(k, "(")
+			tmp = k[:space] + " " + thicknessParam + "мм 09г2с" + " на " + k[parenthesis+1:]
 			tmp = strings.Trim(tmp, "№")
 			tmp = strings.Trim(tmp, "ООО ЭС")
 			tmp = strings.Trim(tmp, ")") + "\n"
