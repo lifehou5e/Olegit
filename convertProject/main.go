@@ -112,7 +112,7 @@ func main() {
 	}
 	sort.Strings(outSlice)
 	if len(outSlice) == 0 {
-		errEmptyOut := errors.New("в данном диапазоне металла задонного типа не обнаружено")
+		errEmptyOut := errors.New("в данном диапазоне металла заданного типа не обнаружено")
 		fmt.Println(errEmptyOut)
 	}
 	file, err := os.Create("test.txt")
@@ -122,6 +122,13 @@ func main() {
 	defer file.Close()
 	for _, v := range outSlice {
 		file.WriteString(v)
+	}
+	fmt.Print("\n----------------\nфайл test.txt создан")
+	var lastWords string
+	fmt.Println("\n----------------\nВведите любой символ, чтобы выйти")
+	fmt.Scan(&lastWords)
+	if lastWords != "" {
+		return
 	}
 }
 
