@@ -1,4 +1,4 @@
-module github.com/lifehou5e/olegit
+module convertProject
 
 go 1.18
 
