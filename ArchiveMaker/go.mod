@@ -1,4 +1,4 @@
-module archive
+module main
 
 go 1.18
 
